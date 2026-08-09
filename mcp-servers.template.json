@@ -1,0 +1,33 @@
+{
+  "_comment": "Template for `claude mcp add --scope user`. 'playwright' mirrors the server actually found in ~/.claude.json. chrome-devtools/firecrawl/perplexity are scaffolding entries (not present in the original config when this template was generated) — verify package names and env vars before running the install scripts, then delete this note.",
+  "servers": [
+    {
+      "name": "playwright",
+      "command": "npx",
+      "args": ["-y", "@playwright/mcp@latest"],
+      "env": {}
+    },
+    {
+      "name": "chrome-devtools",
+      "command": "npx",
+      "args": ["-y", "chrome-devtools-mcp@latest"],
+      "env": {}
+    },
+    {
+      "name": "firecrawl",
+      "command": "npx",
+      "args": ["-y", "firecrawl-mcp"],
+      "env": {
+        "FIRECRAWL_API_KEY": "${FIRECRAWL_API_KEY}"
+      }
+    },
+    {
+      "name": "perplexity",
+      "command": "npx",
+      "args": ["-y", "server-perplexity-ask"],
+      "env": {
+        "PERPLEXITY_API_KEY": "${PERPLEXITY_API_KEY}"
+      }
+    }
+  ]
+}

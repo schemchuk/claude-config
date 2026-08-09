@@ -16,6 +16,24 @@ identically on any new machine.
 > the package names and required env vars still match before running the install script, then
 > remove the `_comment` field from the template once confirmed.
 
+## Використання на поточному комп'ютері
+
+Цей репозиторій — бекап, а не щось, що треба "запускати" щодня.
+
+- `playwright` вже встановлений і працює (`claude mcp list` це підтвердить) — нічого робити не треба.
+- `chrome-devtools`, `firecrawl`, `perplexity` — це заготовки в `mcp-servers.template.json`,
+  вони ще НЕ встановлені у вас. Якщо захочете їх підключити:
+  1. `cp .env.example .env` і впишіть реальні ключі (`FIRECRAWL_API_KEY`, `PERPLEXITY_API_KEY`).
+  2. `./install.sh` (потрібен `jq`: `sudo apt install jq`).
+  3. Перевірте: `claude mcp list`.
+- Якщо додасте/зміните MCP-сервер локально — онови `mcp-servers.template.json` і закоміть,
+  щоб бекап залишався актуальним (див. розділ "Updating the template" нижче).
+- Репозиторій ще не запушений на GitHub. Команди для першого пушу:
+  ```bash
+  gh repo create claude-config --private --source=. --remote=origin
+  git push -u origin main
+  ```
+
 ## Setup on a new computer
 
 1. Clone this repository:

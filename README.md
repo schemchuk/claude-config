@@ -21,8 +21,9 @@ skills, and plugins — so I can set it up identically on any new machine.
 > created. The `chrome-devtools`, `firecrawl`, `perplexity`, and `omniroute` entries are
 > scaffolding — verify the package names and required env vars still match before running the
 > install script, then remove the `_comment` field from the template once confirmed.
-> `omniroute` additionally requires `npm install -g omniroute` — its MCP server talks to the
-> local OmniRoute gateway at `http://localhost:20128`.
+> `omniroute` additionally requires `npm install -g omniroute` and a running gateway.
+> The `omniroute --mcp` stdio server currently has a package-level bug in v3.8.49, so the
+> recommended way to use it with Claude Code is as an API backend (see below).
 
 ## Використання на поточному комп'ютері
 
@@ -94,6 +95,62 @@ skills, and plugins — so I can set it up identically on any new machine.
    claude mcp list
    claude plugin list
    ```
+
+## Running Claude Code through OmniRoute (optional)
+
+Instead of adding OmniRoute as an MCP server, you can point Claude Code itself at the
+local OmniRoute gateway. This makes Claude Code send its model requests through OmniRoute,
+so you get routing, fallback, and compression.
+
+1. Install and start OmniRoute (one of these options):
+
+   **System-wide (recommended):**
+
+   ```bash
+   curl -fsSL https://deb.nodesource.com/setup_22.x | sudo -E bash -
+   sudo apt install -y nodejs
+   sudo npm install -g omniroute
+   ```
+
+   Then enable the systemd user service so it starts automatically:
+
+   ```bash
+   systemctl --user daemon-reload
+   systemctl --user enable --now omniroute
+   ```
+
+   **Without systemd:** just run `omniroute &` (does not survive reboot).
+
+2. Open the OmniRoute dashboard at http://localhost:20128 and:
+   - log in with the default password `CHANGEME`;
+   - create an API key under **API Keys**;
+   - connect at least one provider under **Providers** (e.g. AgentRouter free tier).
+
+3. Add the OmniRoute key to your `.env`:
+
+   ```bash
+   ANTHROPIC_BASE_URL=http://localhost:20128/v1
+   ANTHROPIC_API_KEY=sk-your-omniroute-key
+   ```
+
+4. Launch Claude Code with those variables. `--bare` forces API-key auth instead of OAuth:
+
+   ```bash
+   export ANTHROPIC_BASE_URL=http://localhost:20128/v1
+   export ANTHROPIC_API_KEY=sk-your-omniroute-key
+   claude --bare
+   ```
+
+   To test non-interactively:
+
+   ```bash
+   ANTHROPIC_BASE_URL=http://localhost:20128/v1 \
+   ANTHROPIC_API_KEY=sk-your-omniroute-key \
+     claude --bare --print -p "say hi" --dangerously-skip-permissions
+   ```
+
+> **Note:** in this mode OmniRoute is Claude Code's API backend, not an MCP tool. The MCP
+> servers installed above (Playwright, Firecrawl, Perplexity, etc.) keep working alongside it.
 
 ## Updating the template
 

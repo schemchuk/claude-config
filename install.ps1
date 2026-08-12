@@ -120,4 +120,7 @@ if (Test-Path $Manifest) {
     }
 }
 
+Write-Host "Current MCP servers:"
+claude mcp list
+
 Write-Host "Done."

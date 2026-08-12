@@ -112,4 +112,7 @@ if [[ -f "$MANIFEST" ]]; then
   done < "$MANIFEST"
 fi
 
+echo "Current MCP servers:"
+claude mcp list
+
 echo "Done."

@@ -1,5 +1,4 @@
 {
-  "_comment": "Template for `claude mcp add --scope user`. 'playwright' mirrors the server actually found in ~/.claude.json. chrome-devtools/firecrawl/perplexity/omniroute are scaffolding entries (not present in the original config when this template was generated) — verify package names and env vars before running the install scripts, then delete this note. 'omniroute' additionally requires `npm install -g omniroute` first (the MCP server talks to the local OmniRoute gateway at http://localhost:20128).",
   "servers": [
     {
       "name": "playwright",
@@ -28,12 +27,6 @@
       "env": {
         "PERPLEXITY_API_KEY": "${PERPLEXITY_API_KEY}"
       }
-    },
-    {
-      "name": "omniroute",
-      "command": "omniroute",
-      "args": ["--mcp"],
-      "env": {}
     }
   ]
 }
